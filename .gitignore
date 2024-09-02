@@ -1,1 +1,16 @@
 appsettings.Development.json
+
+# Ignore build and debug directories
+bin/
+obj/
+
+# Ignore NuGet packages
+*.nupkg
+project.assets.json
+project.nuget.cache
+*.csproj.nuget.g.targets
+*.csproj.nuget.dgspec.json
+
+# Ignore user-specific files
+*.user
+*.suo
