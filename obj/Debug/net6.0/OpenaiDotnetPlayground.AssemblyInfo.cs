@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OpenaiDotnetPlayground")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5930c69f040faaffe8b87cd17bfaa959a8149371")]
 [assembly: System.Reflection.AssemblyProductAttribute("OpenaiDotnetPlayground")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OpenaiDotnetPlayground")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
