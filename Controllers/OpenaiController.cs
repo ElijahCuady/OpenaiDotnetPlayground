@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using OpenAI;
 using OpenAI.Chat;
+using OpenAI.Models;
 using src.OpenaiDotnetPlayground.Services;
 
 namespace src.OpenaiDotnetPlayground.Controllers;
@@ -9,31 +11,32 @@ namespace src.OpenaiDotnetPlayground.Controllers;
 public class OpenaiController : ControllerBase
 {
     private readonly Configuration _configuration;
-    private readonly ChatClient _client;
+    private readonly OpenAIClient _client;
 
-    public OpenaiController(Configuration configuration, ChatClient client)
+    public OpenaiController(Configuration configuration, OpenAIClient client)
     {
         _configuration = configuration;
         _client = client;
     }
 
-
-    [HttpPost("sendRequest")]
+        [HttpPost("sendRequest")]
     public async Task<IActionResult> SendRequest(){
         try{
-            List<UserChatMessage> messages = new List<UserChatMessage>();
-            String stringPrompt = "Say good morning!";
-            UserChatMessage prompt = new UserChatMessage(stringPrompt);
-            messages.Add(prompt);
-            CustomPrinter.Print(prompt.ToString()!, "Prompt");
 
-            ChatCompletion chatCompletion = _client.CompleteChat(messages);
-            CustomPrinter.Print(chatCompletion.ToString() ?? "Empty", "ChatCompletion");
+            var messages = new List<Message>
+            {
+                new Message(Role.User, "Who won the world series in 2020?"),
+            };
+            var chatRequest = new ChatRequest(messages, Model.GPT4o);
+            CustomPrinter.Print(chatRequest.ToString()!, "chatRequest");
 
-            Console.WriteLine("\n\nHello\n\n");
-            Console.WriteLine(chatCompletion);
+            var response = await _client.ChatEndpoint.GetCompletionAsync(chatRequest);
+            CustomPrinter.Print(response.ToString() ?? "Empty", "chatResponse");
 
-            return Ok(chatCompletion);
+            var choice = response.FirstChoice;
+            Console.WriteLine($"[{choice.Index}] {choice.Message.Role}: {choice.Message} | Finish Reason: {choice.FinishReason}");
+
+            return Ok(response);
         } catch(Exception ex){
             return BadRequest(ex);
         }
@@ -60,3 +63,28 @@ public class OpenaiController : ControllerBase
         return Ok(vals);
     }
 }
+
+    /*
+    Official openai lib
+    [HttpPost("sendRequest")]
+    public async Task<IActionResult> SendRequest(){
+        try{
+            List<UserChatMessage> messages = new List<UserChatMessage>();
+            String stringPrompt = "Say good morning!";
+            UserChatMessage prompt = new UserChatMessage(stringPrompt);
+            messages.Add(prompt);
+            CustomPrinter.Print(prompt.ToString()!, "Prompt");
+
+            ChatCompletion chatCompletion = _client.CompleteChat(messages);
+            CustomPrinter.Print(chatCompletion.ToString() ?? "Empty", "ChatCompletion");
+
+            Console.WriteLine("\n\nHello\n\n");
+            Console.WriteLine(chatCompletion);
+
+            return Ok(chatCompletion);
+        } catch(Exception ex){
+            return BadRequest(ex);
+        }
+    }
+    */
+    
