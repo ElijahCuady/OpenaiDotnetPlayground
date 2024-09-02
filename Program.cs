@@ -1,5 +1,5 @@
 using src.OpenaiDotnetPlayground.Services;
-
+using src.OpenaiDotnetPlayground.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +13,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<Configuration>();
+builder.Services.AddSingleton<CustomPrinter>();
+
+builder.Services.AddOpenAIServices();
+
 
 
 var app = builder.Build();
