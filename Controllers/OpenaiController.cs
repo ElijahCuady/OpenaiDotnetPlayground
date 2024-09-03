@@ -19,7 +19,32 @@ public class OpenaiController : ControllerBase
         _client = client;
     }
 
-        [HttpPost("sendRequest")]
+        [HttpPost("sendRequestGptMini")]
+    public async Task<IActionResult> SendRequestGptMini(){
+        try{
+
+            var messages = new List<Message>
+            {
+                new Message(Role.User, "Who won the world series in 2020?"),
+            };
+            var model = new Model("gpt-4o-mini");
+
+            var chatRequest = new ChatRequest(messages, model);
+            CustomPrinter.Print(chatRequest.ToString()!, "chatRequest");
+
+            var response = await _client.ChatEndpoint.GetCompletionAsync(chatRequest);
+            CustomPrinter.Print(response.ToString() ?? "Empty", "chatResponse");
+
+            var choice = response.FirstChoice;
+            Console.WriteLine($"[{choice.Index}] {choice.Message.Role}: {choice.Message} | Finish Reason: {choice.FinishReason}");
+
+            return Ok(response);
+        } catch(Exception ex){
+            return BadRequest(ex);
+        }
+    }
+
+    [HttpPost("sendRequest")]
     public async Task<IActionResult> SendRequest(){
         try{
 
