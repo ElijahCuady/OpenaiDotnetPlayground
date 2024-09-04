@@ -60,7 +60,7 @@ public class EntityModelConverter
 
         return chatResponse;
     }
-    /*
+    
     public static Feedback ConvertToFeedback(FlashcardWithUserInputDTO flashcardWithUserInputDTO, FeedbackDTO feedbackDTO)
     {
         Feedback feedback = new Feedback();
@@ -75,7 +75,7 @@ public class EntityModelConverter
 
         return feedback;
     }
-*/
+
 
     /*
     public static AiDistractorsSet ConvertToAiDistractorsSet(Deck deck, ChatRequest chatRequest, ChatResponse chatResponse)

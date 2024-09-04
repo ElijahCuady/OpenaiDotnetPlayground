@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using OpenAI;
 using OpenAI.Chat;
 using OpenAI.Models;
@@ -44,6 +45,13 @@ public class OpenaiController : ControllerBase
             // convert and store chatresponse
             CustomChatResponse customChatResponse = EntityModelConverter.ConvertToCustomChatResponse(response, requestSW);
             CustomPrinter.FormatCustomChatResponse(customChatResponse);
+
+            string jsonString = response.Choices[0].Message.Content.ToString();
+
+            FeedbackDTO? generatedFeedback = JsonConvert.DeserializeObject<FeedbackDTO>(jsonString);
+            if (generatedFeedback is null) return BadRequest();
+            Feedback feedback = EntityModelConverter.ConvertToFeedback(flashcardWithUserInputDTO, generatedFeedback);
+            CustomPrinter.Print(feedback.ToString(), "Feedback");
 
             return Ok(response);
         } catch(Exception ex){
