@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using OpenAI;
 using OpenAI.Chat;
@@ -31,17 +32,18 @@ public class OpenaiController : ControllerBase
                 return BadRequest("Something went wrong with the input...");
             }
             
+            // send request, expect a response 
+            var requestSW = Stopwatch.StartNew();
             var response = await _client.ChatEndpoint.GetCompletionAsync(chatRequest);
+            requestSW.Stop();
 
             // convert and store chatrequest
             CustomChatRequest customChatRequest = EntityModelConverter.ConvertToCustomChatRequest(chatRequest);
             CustomPrinter.FormatCustomChatRequest(customChatRequest);
 
-
-            CustomPrinter.Print(response.ToString() ?? "Empty", "chatResponse");
-
-            var choice = response.FirstChoice;
-            Console.WriteLine($"[{choice.Index}] {choice.Message.Role}: {choice.Message} | Finish Reason: {choice.FinishReason}");
+            // convert and store chatresponse
+            CustomChatResponse customChatResponse = EntityModelConverter.ConvertToCustomChatResponse(response, requestSW);
+            CustomPrinter.FormatCustomChatResponse(customChatResponse);
 
             return Ok(response);
         } catch(Exception ex){

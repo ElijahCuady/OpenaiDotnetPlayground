@@ -39,4 +39,24 @@ public class CustomPrinter
         Console.WriteLine(sb.ToString());
     }
 
+    public static void FormatCustomChatResponse(CustomChatResponse response)
+    {
+        var sb = new StringBuilder();
+
+        sb.AppendLine("\n\n******** C U S T O M  C H A T  R E S P O N S E ********");
+        sb.AppendLine($"Id: {response.Id}");
+        sb.AppendLine($"UserId: {response.UserId}");
+        sb.AppendLine($"Created: {response.Created}");
+        sb.AppendLine($"Model: {response.Model}");
+        sb.AppendLine($"SystemFingerprint: {response.SystemFingerprint}");
+        sb.AppendLine($"Message: \n{response.Message}");
+        sb.AppendLine($"Prompt Tokens: {response.PromptTokens}");
+        sb.AppendLine($"Completion Tokens: {response.CompletionTokens}");
+        sb.AppendLine($"Total Tokens: {response.TotalTokens}");
+        sb.AppendLine($"Latency: {response.Latency}");
+        sb.AppendLine($"Timestamp: {response.Timestamp}");
+        sb.AppendLine("******** C U S T O M  C H A T  R E S P O N S E ********\n\n");
+
+        Console.WriteLine(sb.ToString());
+    }
 }

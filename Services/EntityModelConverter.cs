@@ -32,7 +32,7 @@ public class EntityModelConverter
     }
 
     public static string parseMessagesForStoring(IReadOnlyList<Message> messages){
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
 
         foreach (var message in messages){
             sb.AppendLine($"Role: {message.Role}");
@@ -42,23 +42,25 @@ public class EntityModelConverter
 
         return sb.ToString();
     }
-    /*
-    public static ChatResponse ConvertToChatResponse(Response<ChatCompletions> response, Stopwatch sw)
+    
+    public static CustomChatResponse ConvertToCustomChatResponse(ChatResponse response, Stopwatch sw)
     {
-        ChatResponse chatResponse = new ChatResponse();
-        
-        chatResponse.Created = response.Value.Created;
-        //chatResponse.Model = response.Value.
-        chatResponse.SystemFingerprint = response.Value.SystemFingerprint;
-        chatResponse.MessageRole = response.Value.Choices[0].Message.Role.ToString();
-        chatResponse.MessageContent = response.Value.Choices[0].Message.Content;
-        chatResponse.PromptTokens = response.Value.Usage.PromptTokens;
-        chatResponse.CompletionTokens = response.Value.Usage.CompletionTokens;
-        chatResponse.TotalTokens = response.Value.Usage.TotalTokens;
-        chatResponse.Latency = sw.Elapsed.TotalSeconds;
+        CustomChatResponse chatResponse = new()
+        {
+            Created = response.CreatedAtUnixTimeSeconds,
+            Model = response.Model,
+            SystemFingerprint = response.SystemFingerprint,
+            Message = response.Choices[0].Message.Content.ToString(),
+            PromptTokens = response.Usage.PromptTokens,
+            CompletionTokens = response.Usage.CompletionTokens,
+            TotalTokens = response.Usage.TotalTokens,
+            Latency = sw.Elapsed.TotalSeconds,
+            Timestamp = DateTime.Now,
+        };
 
         return chatResponse;
     }
+    /*
     public static Feedback ConvertToFeedback(FlashcardWithUserInputDTO flashcardWithUserInputDTO, FeedbackDTO feedbackDTO)
     {
         Feedback feedback = new Feedback();

@@ -36,7 +36,7 @@ public class ChatRequestBuilder{
             Student's Response: "{{flashcardWithUserInputDTO.UserAnswer}}"
             """;
 
-        Console.WriteLine($"Entire Prompt:\n{prompt}");
+        //Console.WriteLine($"Entire Prompt:\n{prompt}");
         var messages = new List<Message>
         {
             new Message(Role.User, prompt),
@@ -44,7 +44,7 @@ public class ChatRequestBuilder{
         var model = new Model(modelName);
 
         var chatRequest = new ChatRequest(messages, model, maxTokens: 150, seed: 905, responseFormat: ChatResponseFormat.Json);
-        CustomPrinter.Print(chatRequest.ToString()!, "chatRequest");
+        //CustomPrinter.Print(chatRequest.ToString()!, "chatRequest");
 
 
         return chatRequest;

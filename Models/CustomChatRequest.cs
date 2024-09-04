@@ -2,7 +2,8 @@ using System.Diagnostics;
 using System.Text;
 
 
-namespace src.OpenaiDotnetPlayground.Models{
+namespace src.OpenaiDotnetPlayground.Models
+{
     public class CustomChatRequest
     {
         public int Id { get; set; }
