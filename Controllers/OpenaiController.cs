@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using OpenAI;
 using OpenAI.Chat;
 using OpenAI.Models;
+using src.OpenaiDotnetPlayground.DTOs;
+using src.OpenaiDotnetPlayground.Models;
 using src.OpenaiDotnetPlayground.Services;
 
 namespace src.OpenaiDotnetPlayground.Controllers;
@@ -19,7 +21,35 @@ public class OpenaiController : ControllerBase
         _client = client;
     }
 
-        [HttpPost("sendRequestGptMini")]
+    [HttpPost("sendFeedbackGptMini")]
+    public async Task<IActionResult> SendFeedbackGptMini(FlashcardWithUserInputDTO flashcardWithUserInputDTO){
+        try{
+
+            var chatRequest = ChatRequestBuilder.BuildFeedbackPrompt("gpt-4o-mini", flashcardWithUserInputDTO);
+
+            if(chatRequest == null){
+                return BadRequest("Something went wrong with the input...");
+            }
+            
+            var response = await _client.ChatEndpoint.GetCompletionAsync(chatRequest);
+
+            // convert and store chatrequest
+            CustomChatRequest customChatRequest = EntityModelConverter.ConvertToCustomChatRequest(chatRequest);
+            CustomPrinter.FormatCustomChatRequest(customChatRequest);
+
+
+            CustomPrinter.Print(response.ToString() ?? "Empty", "chatResponse");
+
+            var choice = response.FirstChoice;
+            Console.WriteLine($"[{choice.Index}] {choice.Message.Role}: {choice.Message} | Finish Reason: {choice.FinishReason}");
+
+            return Ok(response);
+        } catch(Exception ex){
+            return BadRequest(ex);
+        }
+    }
+
+    [HttpPost("sendRequestGptMini")]
     public async Task<IActionResult> SendRequestGptMini(){
         try{
 
@@ -67,6 +97,7 @@ public class OpenaiController : ControllerBase
         }
     }
 
+    /*
     [HttpGet("test")]
     public async Task<IActionResult> Test(){
         var vals = new List<string>();
@@ -87,6 +118,7 @@ public class OpenaiController : ControllerBase
         
         return Ok(vals);
     }
+    */
 }
 
     /*

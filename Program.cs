@@ -1,5 +1,7 @@
 using src.OpenaiDotnetPlayground.Services;
 using src.OpenaiDotnetPlayground.Extensions;
+using src.OpenaiDotnetPlayground.DTOs;
+//using src.OpenaiDotnetPlayground.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<Configuration>();
 builder.Services.AddSingleton<CustomPrinter>();
+builder.Services.AddSingleton<ChatRequestBuilder>();
+builder.Services.AddSingleton<EntityModelConverter>();
+
 
 builder.Services.AddOpenAIServices();
 
